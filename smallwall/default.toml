@@ -1,0 +1,22 @@
+[deploy]
+# Information about the target OS
+
+# iptables config location
+iptables = "/etc/sysconfig/iptables"
+
+[firewall]
+# firewall configuration
+
+    [firewall.lan]
+    # LAN information
+
+    # Network subnet mask
+    subnet = "" 
+    # IP of default gateway
+    gateway = ""
+
+    [firewall.qz]
+    # QZ information
+
+    # Quarantined host
+    host = ""

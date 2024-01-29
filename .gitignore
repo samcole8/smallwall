@@ -1,3 +1,6 @@
+# Non-default config file
+smallwall.toml
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
