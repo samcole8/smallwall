@@ -14,11 +14,11 @@ def smallwall(device):
     # Log start
     helpers.log("INFO: Started smallwall.")
     # Load config
-    config = helpers.load_toml(CONFIG_RPATH)
+    config = helpers.load_toml(CONFIG_RPATH, auto_create=True, skeleton="default.toml")
     # Mount disk
     helpers.mount("m", device, MOUNT_RPATH)
     # Modify iptables
-    
+
     # Unmount disk
     helpers.mount("u", device, MOUNT_RPATH)
 

@@ -1,5 +1,7 @@
 from datetime import datetime
 from pathlib import Path
+from shutil import copyfile
+import os
 import toml
 import sys
 import sh
@@ -18,18 +20,27 @@ def log(message, logfile="smallwall.log", log=True):
         except (FileNotFoundError, OSError, IOError):
             print("ERROR: Could not open log file. Check permissions are set correctly.")
 
-def load_toml(rpath, apath=get_path()):
+def load_toml(rpath, apath=get_path(), auto_create=False, skeleton=False):
     """Open TOML file and return dictionary"""
+    fpath = apath / rpath
+    if not os.path.exists(rpath) and auto_create == True:
+        if skeleton != False:
+            copyfile(skeleton, rpath)
+            log(f"INFO: {rpath} not found. Cloned from {skeletion}.")
+        else:
+            with open("rpath", "w") as file:
+                file.write()
+                log(f"INFO: {rpath} not found. File has been created.")
     try:
-        with open(apath / rpath, "r") as toml_file:
+        with open(fpath, "r") as toml_file:
             toml_dict = toml.load(toml_file)
-            log(f"INFO: Successfully loaded {apath}/{rpath}.")
+            log(f"INFO: Successfully loaded {fpath}.")
             return toml_dict
     except (FileNotFoundError, OSError, IOError):
-        log(f"FATAL: Could not open {apath}/{rpath}. Check file exists and permissions are set correctly.")
+        log(f"FATAL: Could not open {fpath}. Check file exists and permissions are set correctly.")
         sys.exit()
     except toml.decoder.TomlDecodeError as error:
-        log(f"FATAL: Could not process {apath}/{rpath}: {error}")
+        log(f"FATAL: Could not process {fpath}: {error}")
 
 def mount(operation, device, mount_rpath):
     """Mount or unmount the specified disk"""
