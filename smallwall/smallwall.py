@@ -11,6 +11,7 @@ CONFIG_RPATH = "smallwall.toml"
 MOUNT_RPATH = "mount"
 
 def smallwall(device):
+    print(SMALLWALL)
     # Log start
     helpers.log("INFO: Started smallwall.")
     # Load config
@@ -23,5 +24,7 @@ def smallwall(device):
     helpers.mount("u", device, MOUNT_RPATH)
 
 if __name__ == "__main__":
-    print(SMALLWALL)
-    smallwall(argv[1])
+    try:
+        smallwall(argv[1])
+    except IndexError:
+        print("Missing device name. (e.g. /dev/mmcblk0p1)")
