@@ -6,7 +6,7 @@ SMALLWALL = """._______.
 |___|___|
 smallwall"""
 
-CONFIG_RPATH = "smallwall.py"
+CONFIG_RPATH = "smallwall.toml"
 
 
 def smallwall():
