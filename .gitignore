@@ -1,3 +1,6 @@
+# Mountpoint
+mount/
+
 # Non-default config file
 smallwall.toml
 
