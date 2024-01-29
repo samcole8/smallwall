@@ -2,6 +2,7 @@ from datetime import datetime
 from pathlib import Path
 import toml
 import sys
+import sh
 
 def get_path():
     """Return absolute file path"""
@@ -22,9 +23,23 @@ def load_toml(rpath, apath=get_path()):
     try:
         with open(apath / rpath, "r") as toml_file:
             toml_dict = toml.load(toml_file)
+            log(f"INFO: Successfully loaded {apath}/{rpath}.")
             return toml_dict
     except (FileNotFoundError, OSError, IOError):
-        log(f"FATAL: Could not open {rpath}. Check file exists and permissions are set correctly.")
+        log(f"FATAL: Could not open {apath}/{rpath}. Check file exists and permissions are set correctly.")
         sys.exit()
     except toml.decoder.TomlDecodeError as error:
-        log(f"FATAL: Could not process {rpath}: {error}")
+        log(f"FATAL: Could not process {apath}/{rpath}: {error}")
+
+def mount(operation, device, mount_rpath):
+    """Mount or unmount the specified disk"""
+    mount_fpath = get_path() / mount_rpath
+    if operation == "m":
+        try:
+            sh.mount(device, mount_rpath)
+            log(f"INFO: Successfully mounted {device} on {mount_fpath}.")
+        except sh.ErrorReturnCode_32:
+            log("FATAL: This program must be run as root.")
+    elif operation == "u":
+        sh.umount(mount_rpath)
+        log(f"INFO: Successfully umounted {mount_fpath}.")
