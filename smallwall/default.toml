@@ -10,13 +10,17 @@ iptables = "/etc/sysconfig/iptables"
     [firewall.lan]
     # LAN information
 
+    # LAN interface
+    if = "eth0"
     # Network subnet mask
-    subnet = "" 
+    subnet = ""
     # IP of default gateway
     gateway = ""
 
     [firewall.qz]
     # QZ information
 
+    # Quarantine interface
+    if = "eth1"
     # Quarantined host
     host = ""
