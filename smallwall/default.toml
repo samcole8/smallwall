@@ -12,8 +12,9 @@ iptables = "/etc/sysconfig/iptables"
 
     # LAN interface
     if = "eth0"
-    # Network subnet mask
-    subnet = ""
+    # Network ID and CIDR
+    id = ""
+    cidr = ""
     # IP of default gateway
     gateway = ""
 
