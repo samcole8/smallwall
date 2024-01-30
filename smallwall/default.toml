@@ -1,27 +1,35 @@
-[deploy]
-# Information about the target OS
+[filesystem]
+# Filesystem configuration
 
-# iptables config location
-nftables = "/etc/nftables/nftables.conf"
+# Full path to mount point from /
+# e.g. /mnt/smallwall
+mountpoint = "/mnt/smallwall"
+
+# Full path to nftables.conf from external disk root
+# e.g. /etc/nftables.conf
+nftables = "/etc/nftables.conf"
 
 [firewall]
-# firewall configuration
+# Firewall configuration
 
     [firewall.lan]
-    # LAN information
+    # LAN configuration
 
-    # LAN interface
-    if = "eth0"
+    # Physical interface
+    interface = "eth0"
+
     # Network ID and CIDR
-    id = ""
-    cidr = ""
+    network_id = "192.168.1.0"
+    cidr = "/24"
+
     # IP of default gateway
-    gateway = ""
+    gateway = "192.168.1.1"
 
     [firewall.qz]
-    # QZ information
+    # QZ configuration
 
-    # Quarantine interface
-    if = "eth1"
-    # Quarantined host
-    host = ""
+    # Physical interface
+    interface = "eth1"
+
+    # Quarantined host IP
+    host_ip = ""
