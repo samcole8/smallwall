@@ -2,11 +2,11 @@ import helpers
 from sys import argv
 
 SMALLWALL = (
-    "._______."
-    "|___|___|"
-    "|_|___|_|"
-    "|___|___|"
-    "smallwall"
+    "._______.\n"
+    "|___|___|\n"
+    "|_|___|_|\n"
+    "|___|___|\n"
+    "smallwall\n"
     )
 
 CONFIG_RPATH = "smallwall.toml"
@@ -19,8 +19,6 @@ def gen(config):
     lan = config["firewall"]["lan"]["if"]
     netid_cidr = f'{config["firewall"]["lan"]["id"]}/{config["firewall"]["lan"]["cidr"]}'
     gateway = config["firewall"]["lan"]["gateway"]
-
-    print(qz, lan, netid_cidr, gateway)
 
     return (
         "#!/usr/sbin/nft -f\n"
@@ -51,9 +49,9 @@ def deploy(chroot_path, chroot_config):
     # Overwrite nftables config file on mount
     try:
         if f"{chroot_path}{MOUNT_CONFIG_PATH}" != "/etc/nftables":
-            print(nftables_to_write)
             with open(f'{chroot_path}{MOUNT_CONFIG_PATH}', "w") as nftables_config:
                 nftables_config.write(nftables_to_write)
+            helpers.log(f"INFO: Successfully written nftables configuration to {chroot_path}{MOUNT_CONFIG_PATH}.")
     except FileNotFoundError:
         helpers.log(f"FATAL: Cannot find {chroot_path}{MOUNT_CONFIG_PATH}.")
 
