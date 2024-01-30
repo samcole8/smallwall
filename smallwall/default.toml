@@ -2,7 +2,7 @@
 # Information about the target OS
 
 # iptables config location
-iptables = "/etc/sysconfig/iptables"
+nftables = "/etc/nftables/nftables.conf"
 
 [firewall]
 # firewall configuration
