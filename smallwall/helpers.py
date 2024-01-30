@@ -48,6 +48,10 @@ def mount(operation, device, mount_rpath):
     mount_fpath = get_path() / mount_rpath
     if operation == "m":
         try:
+            try:
+                sh.mkdir (mount_rpath)
+            except sh.ErrorReturnCode_1:
+                pass
             sh.mount(device, mount_rpath)
             log(f"INFO: Successfully mounted {device} on {mount_fpath}.")
         except sh.ErrorReturnCode_32:
