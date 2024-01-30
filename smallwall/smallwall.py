@@ -1,11 +1,13 @@
 import helpers
 from sys import argv
 
-SMALLWALL = """._______.
-|___|___|
-|_|___|_|
-|___|___|
-smallwall"""
+SMALLWALL = (
+    "._______."
+    "|___|___|"
+    "|_|___|_|"
+    "|___|___|"
+    "smallwall"
+    )
 
 CONFIG_RPATH = "smallwall.toml"
 MOUNT_RPATH = "mount"
