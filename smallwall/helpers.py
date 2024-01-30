@@ -10,15 +10,14 @@ def get_path():
     """Return absolute file path"""
     return Path(__file__).parent
 
-def log(message, logfile="smallwall.log", log=True):
+def log(message, file="smallwall.log"):
     """Write message to log"""
-    if log == True:
-        try:
-            with open(logfile, "a") as log:
-                print(message)
-                log.write(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " | " + message + "\n")
-        except (FileNotFoundError, OSError, IOError):
-            print("ERROR: Could not open log file. Check permissions are set correctly.")
+    try:
+        with open(file, "a") as log:
+            print(message)
+            log.write(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " | " + message + "\n")
+    except (FileNotFoundError, OSError, IOError):
+        print("ERROR: Could not open log file. Check permissions are set correctly.")
 
 def load_toml(rpath, apath=get_path(), auto_create=False, skeleton=False):
     """Open TOML file and return dictionary"""
@@ -43,20 +42,20 @@ def load_toml(rpath, apath=get_path(), auto_create=False, skeleton=False):
         log(f"FATAL: Could not process {fpath}: {error}")
         sys.exit()
 
-def mount(operation, device, mount_rpath):
+def mount(operation, device, mountpoint):
     """Mount or unmount the specified disk"""
-    mount_fpath = get_path() / mount_rpath
+    mount_fpath = get_path() / mountpoint
     if operation == "m":
         try:
             try:
-                sh.mkdir (mount_rpath)
+                sh.mkdir (mountpoint)
             except sh.ErrorReturnCode_1:
                 pass
-            sh.mount(device, mount_rpath)
+            sh.mount(device, mountpoint)
             log(f"INFO: Successfully mounted {device} on {mount_fpath}.")
         except sh.ErrorReturnCode_32:
             log("FATAL: This program must be run as root.")
             sys.exit()
     elif operation == "u":
-        sh.umount(mount_rpath)
+        sh.umount(mountpoint)
         log(f"INFO: Successfully umounted {mount_fpath}.")
