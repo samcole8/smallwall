@@ -42,6 +42,7 @@ def load_toml(rpath, apath=get_path(), auto_create=False, skeleton=False):
     except toml.decoder.TomlDecodeError as error:
         log(f"FATAL: Could not process {fpath}: {error}")
         sys.exit()
+
 def mount(operation, device, mount_rpath):
     """Mount or unmount the specified disk"""
     mount_fpath = get_path() / mount_rpath
