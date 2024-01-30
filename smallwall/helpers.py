@@ -41,7 +41,7 @@ def load_toml(rpath, apath=get_path(), auto_create=False, skeleton=False):
         sys.exit()
     except toml.decoder.TomlDecodeError as error:
         log(f"FATAL: Could not process {fpath}: {error}")
-
+        sys.exit()
 def mount(operation, device, mount_rpath):
     """Mount or unmount the specified disk"""
     mount_fpath = get_path() / mount_rpath
@@ -51,6 +51,7 @@ def mount(operation, device, mount_rpath):
             log(f"INFO: Successfully mounted {device} on {mount_fpath}.")
         except sh.ErrorReturnCode_32:
             log("FATAL: This program must be run as root.")
+            sys.exit()
     elif operation == "u":
         sh.umount(mount_rpath)
         log(f"INFO: Successfully umounted {mount_fpath}.")
