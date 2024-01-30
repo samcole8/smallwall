@@ -26,7 +26,7 @@ def load_toml(rpath, apath=get_path(), auto_create=False, skeleton=False):
     if not os.path.exists(rpath) and auto_create == True:
         if skeleton != False:
             copyfile(skeleton, rpath)
-            log(f"INFO: {rpath} not found. Cloned from {skeletion}.")
+            log(f"INFO: {rpath} not found. Cloned from {skeleton}.")
         else:
             with open("rpath", "w") as file:
                 file.write()
