@@ -46,17 +46,19 @@ def gen(config):
         "}\n"
     )
 
-def deploy(config):
+def deploy(config, device):
     # Generate nftables config file
     nftables_to_write = gen(config)
     # Overwrite nftables config file on mount
+    nftables = config["filesystem"]["nftables"]
+    mountpoint = config["filesystem"]["mountpoint"]
     try:
-        if f'{config["filesystem"]["mountpoint"]}{config["filesystem"]["nftables"]}' != "/etc/nftables":
-            with open(f'{config["filesystem"]["mountpoint"]}{config["filesystem"]["nftables"]}', "w") as nftables_config:
-                nftables_config.write(nftables_to_write)
-            helpers.log(f'INFO: Successfully written nftables configuration to {config["filesystem"]["mountpoint"]}{config["filesystem"]["nftables"]}.')
+        if f'{mountpoint}{nftables}' != "/etc/nftables":
+            with open(f'{mountpoint}{nftables}', "w") as nftables_file:
+                nftables_file.write(nftables_to_write)
+            helpers.log(f'INFO: Successfully written nftables configuration to {mountpoint}{nftables}.')
     except FileNotFoundError:
-        helpers.log(f'FATAL: Cannot find {config["filesystem"]["mountpoint"]}{config["filesystem"]["nftables"]}.')
+        helpers.log(f'FATAL: Cannot find {mountpoint}{nftables}.')
 
 def smallwall(device):
     print(SMALLWALL)
@@ -65,11 +67,12 @@ def smallwall(device):
     # Load config
     config = helpers.load_toml(CONFIG_RPATH, auto_create=True, skeleton="default.toml")
     # Mount disk
-    helpers.mount("m", device, config["filesystem"]["mountpoint"])
+    mountpoint = config["filesystem"]["mountpoint"]
+    helpers.mount("m", device, mountpoint)
     # Modify iptables
-    deploy(config)
+    deploy(config, device)
     # Unmount disk
-    helpers.mount("u", device, config["filesystem"]["mountpoint"])
+    helpers.mount("u", device, mountpoint)
     # Cleanup - remove mount dir
 
 if __name__ == "__main__":
