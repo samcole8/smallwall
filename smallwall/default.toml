@@ -30,6 +30,3 @@ nftables = "/etc/nftables.conf"
 
     # Physical interface
     interface = "eth1"
-
-    # Quarantined host IP
-    host_ip = ""
