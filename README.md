@@ -16,6 +16,8 @@ smallwall follows the principle of least privilege:
 - smallwall will **drop** LAN packets into the QZ unless they come from the default gateway.
 - smallwall will **drop** broadcast and multicast packets in either direction.
 
+![](https://github.com/samcole8/smallwall/blob/master/smallwall.drawio.png?raw=true)
+
 ## Usage
 
 Assuming `smallwall.toml` has been correctly modified, the following command will deploy the configuration:
