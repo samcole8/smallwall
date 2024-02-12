@@ -43,6 +43,9 @@ def load_toml(rpath, apath=get_path(), auto_create=False, skeleton=False):
         sys.exit()
 
 def mount(operation, device, mountpoint):
+    if os.geteuid() != 0:
+        log("FATAL: This script must run as root.")
+        sys.exit()
     """Mount or unmount the specified disk"""
     mount_fpath = get_path() / mountpoint
     if operation == "m":
