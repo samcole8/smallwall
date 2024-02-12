@@ -54,7 +54,7 @@ def mount(operation, device, mountpoint):
             sh.mount(device, mountpoint)
             log(f"INFO: Successfully mounted {device} on {mount_fpath}.")
         except sh.ErrorReturnCode_32:
-            log("FATAL: This program must be run as root.")
+            log(f"FATAL: The filesystem '{device}' could not be mounted.")
             sys.exit()
     elif operation == "u":
         sh.umount(mountpoint)
