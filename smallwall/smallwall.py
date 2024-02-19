@@ -1,5 +1,6 @@
 import helpers
 from sys import argv
+import os
 
 SMALLWALL = (
     "._______.\n"
@@ -54,6 +55,7 @@ def deploy(config, device):
     mountpoint = config["filesystem"]["mountpoint"]
     try:
         if f'{mountpoint}{iptables}' != "/etc/iptables/rules.v4":
+            os.makedirs(os.path.dirname(f"{mountpoint}{iptables}"), exist_ok=True)
             with open(f'{mountpoint}{iptables}', "w") as iptables_file:
                 iptables_file.write(iptables_to_write)
             helpers.log(f'INFO: Successfully written iptables configuration to {mountpoint}{iptables}.')
