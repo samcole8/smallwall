@@ -5,9 +5,9 @@
 # e.g. /mnt/smallwall
 mountpoint = "/mnt/smallwall"
 
-# Full path to nftables.conf from external disk root
-# e.g. /etc/nftables.conf
-nftables = "/etc/nftables.conf"
+# Full path to iptables rules from external disk root
+# e.g. "/etc/iptables/rules.v4"
+iptables = "/etc/iptables/rules.v4"
 
 [firewall]
 # Firewall configuration

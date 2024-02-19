@@ -14,7 +14,7 @@ CONFIG_RPATH = "smallwall.toml"
 
 
 MOUNT_RPATH = "/mnt/smallwall"
-MOUNT_CONFIG_PATH = "/etc/nftables.conf"
+MOUNT_CONFIG_PATH = "/etc/iptables.conf"
 
 def gen(config):
 
@@ -24,41 +24,41 @@ def gen(config):
     gateway = config["firewall"]["lan"]["gateway"]
 
     return (
-        "#!/usr/sbin/nft -f\n"
-        "\n"
-        "flush ruleset\n"
-        "\n"
-        "table inet smallwall {\n"
-        "    chain input {\n"
-        "        type filter hook input priority 0; policy drop;\n"
-        "    }\n"
-        "\n"
-        "    chain forward {\n"
-        "        type filter hook forward priority 0; policy drop;\n"
-        f'        iifname "{qz}" oifname "{lan}" ip daddr { netid_cidr } drop\n'
-        f'        iifname "{qz}" oifname "{lan}" ip daddr { gateway } accept\n'
-        f'        iifname "{lan}" oifname "{qz}" ip saddr { gateway } accept\n'
-        "    }\n"
-        "\n"
-        "    chain output {\n"
-        "        type filter hook output priority 0; policy drop;\n"
-        "    }\n"
-        "}\n"
-    )
+f"""#!/bin/bash
+
+# Flush existing rules
+iptables -F
+
+# Default policies
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
+iptables -P OUTPUT DROP
+
+# INPUT chain rules
+iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+# FORWARD chain rules
+iptables -A FORWARD -i {qz} -o {lan} -d {netid_cidr} -j DROP
+iptables -A FORWARD -i {qz} -o {lan} -d {gateway} -j ACCEPT
+iptables -A FORWARD -i {lan} -o {qz} -s {gateway} -j ACCEPT
+
+# OUTPUT chain rules
+iptables -A OUTPUT -j DROP"""
+)
 
 def deploy(config, device):
-    # Generate nftables config file
-    nftables_to_write = gen(config)
-    # Overwrite nftables config file on mount
-    nftables = config["filesystem"]["nftables"]
+    # Generate iptables config file
+    iptables_to_write = gen(config)
+    # Overwrite iptables config file on mount
+    iptables = config["filesystem"]["iptables"]
     mountpoint = config["filesystem"]["mountpoint"]
     try:
-        if f'{mountpoint}{nftables}' != "/etc/nftables":
-            with open(f'{mountpoint}{nftables}', "w") as nftables_file:
-                nftables_file.write(nftables_to_write)
-            helpers.log(f'INFO: Successfully written nftables configuration to {mountpoint}{nftables}.')
+        if f'{mountpoint}{iptables}' != "/etc/iptables/rules.v4":
+            with open(f'{mountpoint}{iptables}', "w") as iptables_file:
+                iptables_file.write(iptables_to_write)
+            helpers.log(f'INFO: Successfully written iptables configuration to {mountpoint}{iptables}.')
     except FileNotFoundError:
-        helpers.log(f'FATAL: Cannot find {mountpoint}{nftables}.')
+        helpers.log(f'FATAL: Cannot find {mountpoint}{iptables}.')
 
 def smallwall(device):
     print(SMALLWALL)
