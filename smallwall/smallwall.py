@@ -35,16 +35,10 @@ iptables -P INPUT DROP
 iptables -P FORWARD DROP
 iptables -P OUTPUT DROP
 
-# INPUT chain rules
-iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
-
 # FORWARD chain rules
 iptables -A FORWARD -i {qz} -o {lan} -d {netid_cidr} -j DROP
 iptables -A FORWARD -i {qz} -o {lan} -d {gateway} -j ACCEPT
-iptables -A FORWARD -i {lan} -o {qz} -s {gateway} -j ACCEPT
-
-# OUTPUT chain rules
-iptables -A OUTPUT -j DROP"""
+iptables -A FORWARD -i {lan} -o {qz} -j ACCEPT\n"""
 )
 
 def deploy(config, device):
