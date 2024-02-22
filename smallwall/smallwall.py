@@ -55,6 +55,7 @@ def deploy(config, device):
             helpers.log(f'INFO: Successfully written iptables configuration to {mountpoint}{iptables}.')
     except FileNotFoundError:
         helpers.log(f'FATAL: Cannot find {mountpoint}{iptables}.')
+    # Enable routing between interfaces
 
 def smallwall(device):
     print(SMALLWALL)
@@ -65,7 +66,7 @@ def smallwall(device):
     # Mount disk
     mountpoint = config["filesystem"]["mountpoint"]
     helpers.mount("m", device, mountpoint)
-    # Modify iptables
+    # Modify iptables and kernel routing
     deploy(config, device)
     # Unmount disk
     helpers.mount("u", device, mountpoint)
